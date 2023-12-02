@@ -27,6 +27,7 @@ func main() {
 func runTheDay(dayNum int, data []string) {
 	switch dayNum {
 	case 1:
-		fmt.Println("Calibration = " + strconv.Itoa(day.Day1Part1(data)))
+		fmt.Println("Calibration 1 = " + strconv.Itoa(day.Day1Part1(data)))
+		fmt.Println("Calibration 2 = " + strconv.Itoa(day.Day1Part2(data)))
 	}
 }
