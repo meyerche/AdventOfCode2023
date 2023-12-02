@@ -4,24 +4,26 @@ import (
 	"bufio"
 	"os"
 	"fmt"
+	"strconv"
 )
 
-func ReadFile(day, dataset int) 	[]string {
+func ReadFile(day, dataset int) []string {
 	var data []string
 	
-	filename := "day" + day + "part" + dataset + ".txt"
+	filename := "day" + strconv.Itoa(day) + "part" + strconv.Itoa(dataset) + ".txt"
+	fmt.Println(filename)
 	file, err := os.Open("../data/" + filename)
 	
 	if err != nil {
 		fmt.Println(err)
-		return
+		return []string{}
 	}
 	defer file.Close()
 	
 	scanner := bufio.NewScanner(file)
 	
 	for scanner.Scan() {
-		data = data.append(data, scanner.Text())
+		data = append(data, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintln(os.Stderr, "reading standard input:", err)
