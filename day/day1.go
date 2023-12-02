@@ -16,7 +16,7 @@ func Day1Part1(data []string) int {
 func findFirstDigit(word string) int {
 	for _, ch := range word {
 		if unicode.IsDigit(ch) {
-			return int(ch)
+			return int(ch - '0')
 		}
 	}
 	return 0
@@ -27,7 +27,7 @@ func findLastDigit(word string) int {
 	
 	for i := len(runeWord)-1; i >= 0; i-- {
 		if unicode.IsDigit(runeWord[i]) {
-			return int(runeWord[i])
+			return int(runeWord[i] - '0')
 		}
 	}
 	return 0

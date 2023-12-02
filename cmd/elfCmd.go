@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"flag"
+	"strconv"
 	
 	"github.com/meyerche/AdventOfCode2023/util"
 	"github.com/meyerche/AdventOfCode2023/day"
@@ -23,9 +24,9 @@ func main() {
 	runTheDay(*dayPtr, data)
 }
 
-func runTheDay(day int, data []string) {
-	switch day {
+func runTheDay(dayNum int, data []string) {
+	switch dayNum {
 	case 1:
-		fmt.Println("Calibration = " + day.Day1Part1(data))
+		fmt.Println("Calibration = " + strconv.Itoa(day.Day1Part1(data)))
 	}
 }
