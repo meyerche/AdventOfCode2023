@@ -13,7 +13,7 @@ func ReadFile(day, dataset int) []string {
 	folder := "day" + strconv.Itoa(day) + "/"
 	filename := "part" + strconv.Itoa(dataset) + ".txt"
 
-	file, err := os.Open("../data/" + folder + filename)
+		file, err := os.Open("../data/" + folder + filename)
 	
 	if err != nil {
 		fmt.Println(err)

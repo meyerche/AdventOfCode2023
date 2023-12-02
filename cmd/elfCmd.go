@@ -19,6 +19,7 @@ func main() {
 	}
 	
 	data := util.ReadFile(*dayPtr, *partPtr)
-		
+	
+	
 	fmt.Println(data)
 }
