@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	
-	"github.com/meyerche/AdventOfCode2023/util/getData"
+	"github.com/meyerche/AdventOfCode2023/util"
 )
 
 func main() {
-	data := getData.ReadFile(1, 1)
+	data := util.ReadFile(1, 1)
 	fmt.Println(data)
 }
