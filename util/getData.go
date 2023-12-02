@@ -10,9 +10,10 @@ import (
 func ReadFile(day, dataset int) []string {
 	var data []string
 	
-	filename := "day" + strconv.Itoa(day) + "part" + strconv.Itoa(dataset) + ".txt"
-	fmt.Println(filename)
-	file, err := os.Open("../data/" + filename)
+	folder := "day" + strconv.Itoa(day) + "/"
+	filename := "part" + strconv.Itoa(dataset) + ".txt"
+
+	file, err := os.Open("../data/" + folder + filename)
 	
 	if err != nil {
 		fmt.Println(err)
