@@ -7,11 +7,11 @@ import (
 	"strconv"
 )
 
-func ReadFile(day, dataset int) []string {
+func ReadFile(day int, fn string) []string {
 	var data []string
 	
 	folder := "day" + strconv.Itoa(day) + "/"
-	filename := "part" + strconv.Itoa(dataset) + ".txt"
+	filename := fn + ".txt"
 
 		file, err := os.Open("../data/" + folder + filename)
 	

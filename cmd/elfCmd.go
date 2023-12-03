@@ -11,7 +11,7 @@ import (
 
 func main() {
 	dayPtr := flag.Int("day", 0, "Advent day")
-	partPtr := flag.Int("part", 0, "test data (0), part 1 or 2")
+	filePtr := flag.String("file", "input1", "input or ex (example) plus.  default: input1 ")
 	
 	flag.Parse()
 	
@@ -20,7 +20,7 @@ func main() {
 		return
 	}
 	
-	data := util.ReadFile(*dayPtr, *partPtr)
+	data := util.ReadFile(*dayPtr, *filePtr)
 	runTheDay(*dayPtr, data)
 }
 
