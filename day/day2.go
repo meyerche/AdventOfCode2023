@@ -11,12 +11,6 @@ var LIMITS = map[string]int{
 	"blue":  14,
 }
 
-// type cubeSet struct {
-// 	maxRed int
-// 	maxGreen int
-// 	maxBlue int
-// }
-
 func Day2Part1(games []string) int {
 	sum := 0
 
