@@ -29,5 +29,7 @@ func runTheDay(dayNum int, data []string) {
 	case 1:
 		fmt.Println("Calibration 1 = " + strconv.Itoa(day.Day1Part1(data)))
 		fmt.Println("Calibration 2 = " + strconv.Itoa(day.Day1Part2(data)))
+	case 2:
+		fmt.Println("Part 1 -- Sum of possible games = " + strconv.Itoa(day.Day2Part1(data	)))
 	}
 }
