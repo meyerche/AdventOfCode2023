@@ -70,9 +70,9 @@ func numberOfWins(winningNums, selectedNums []string) int {
 func calculatePoints(n int) int {
 	if n == 0 {
 		return 0
-	} else {
-		return 1 << (n - 1)
 	}
+
+	return 1 << (n - 1)
 }
 
 func countAllCards(counts []int) int {
