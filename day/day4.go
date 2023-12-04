@@ -26,6 +26,26 @@ func Day4Part1(cards []string) int {
 	return sum
 }
 
+func Day4Part2(cards []string) int {
+	fmt.Println(" -- Starting part 2 --")
+
+	cardCounts := make([]int, len(cards)) // initializes all card counts to 0
+
+	for i, card := range cards {
+		cardCounts[i] += 1 //account for original card
+
+		winningNums, selectedNums := splitCard(card)
+
+		n := numberOfWins(winningNums, selectedNums)
+
+		for j := 1; j <= n; j++ {
+			cardCounts[i+j] += cardCounts[i]
+		}
+	}
+
+	return countAllCards(cardCounts)
+}
+
 func splitCard(card string) ([]string, []string) {
 	f := func(c rune) bool {
 		return c == ':' || c == '|'
@@ -53,4 +73,12 @@ func calculatePoints(n int) int {
 	} else {
 		return 1 << (n - 1)
 	}
+}
+
+func countAllCards(counts []int) int {
+	sum := 0
+	for _, count := range counts {
+		sum += count
+	}
+	return sum
 }

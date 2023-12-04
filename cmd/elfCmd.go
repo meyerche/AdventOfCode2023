@@ -37,5 +37,6 @@ func runTheDay(dayNum int, data []string) {
 	case 4:
 		fmt.Println("*** Beginning Day 4 ***")
 		fmt.Println("Total points = " + strconv.Itoa(day.Day4Part1(data)))
+		fmt.Println("Total cards = " + strconv.Itoa(day.Day4Part2(data)))
 	}
 }
