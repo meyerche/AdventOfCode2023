@@ -34,5 +34,8 @@ func runTheDay(dayNum int, data []string) {
 		fmt.Println("Part 2 -- Sum of set power = " + strconv.Itoa(day.Day2Part2(data)))
 	case 3:
 		fmt.Println("Part 1 -- " + strconv.Itoa(day.Day3Part1(data)))
+	case 4:
+		fmt.Println("*** Beginning Day 4 ***")
+		fmt.Println("Total points = " + strconv.Itoa(day.Day4Part1(data)))
 	}
 }
