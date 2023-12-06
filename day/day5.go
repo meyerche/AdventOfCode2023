@@ -1,6 +1,7 @@
 package day
 
 import (
+	"cmp"
 	"fmt"
 	"slices"
 	"strconv"
@@ -27,7 +28,7 @@ func Day5Part1(data []string) int {
 		if i == 0 {
 			sourceList = getInitialSeedList(values)
 			destinationList = append(destinationList, sourceList...)
-			//copy(destinationList, sourceList)
+			// copy(destinationList, sourceList)
 			continue
 		}
 
@@ -45,6 +46,61 @@ func Day5Part1(data []string) int {
 	}
 
 	return slices.Min(destinationList)
+}
+
+func Day5Part2(data []string) int {
+	fmt.Println("-- Begin part 2 --")
+
+	var sourceRangeList, destinationRangeList []seedRange
+
+	for i, values := range data {
+		if i == 0 {
+			sourceRangeList = getInitialSeedRangeList(values)
+			// 			destinationRangeList = append(destinationRangeList, sourceRangeList...)
+			continue
+		}
+
+		if strings.ContainsRune(values, ':') {
+			// 			fmt.Println("New Map:  ")
+			// 			fmt.Print("src -- ")
+			// 			fmt.Print(sourceRangeList)
+			// 			fmt.Print(" -- dst -- ")
+			// 			fmt.Println(destinationRangeList)
+			destinationRangeList = append(destinationRangeList, sourceRangeList...)
+			// 			fmt.Print("src -- ")
+			// 			fmt.Print(sourceRangeList)
+			// 			fmt.Print(" -- dst -- ")
+			// 			fmt.Println(destinationRangeList)
+			sourceRangeList = nil
+			// 			fmt.Print("src -- ")
+			// 			fmt.Print(sourceRangeList)
+			// 			fmt.Print(" -- dst -- ")
+			// 			fmt.Println(destinationRangeList)
+			sourceRangeList = append(sourceRangeList, destinationRangeList...)
+			// 			fmt.Print("src -- ")
+			// 			fmt.Print(sourceRangeList)
+			// 			fmt.Print(" -- dst -- ")
+			// 			fmt.Println(destinationRangeList)
+			destinationRangeList = nil
+			// 			fmt.Print("src -- ")
+			// 			fmt.Print(sourceRangeList)
+			// 			fmt.Print(" -- dst -- ")
+			// 			fmt.Println(destinationRangeList)
+			// 			fmt.Println("========")
+			continue
+		}
+
+		if len(values) > 0 {
+			// 			fmt.Println(sourceRangeList)
+			sourceRangeList, destinationRangeList = mapRangeToDestination(sourceRangeList, destinationRangeList, values)
+			// 			fmt.Println(" --- ")
+			// 			fmt.Println(sourceRangeList)
+			// 			fmt.Println(destinationRangeList)
+		}
+	}
+
+	destinationRangeList = append(destinationRangeList, sourceRangeList...)
+	return getNearestSeedRange(destinationRangeList)
 }
 
 func getInitialSeedList(seeds string) []int {
@@ -70,6 +126,7 @@ func getInitialSeedRangeList(seeds string) []seedRange {
 
 	}
 
+	return seedsInt
 }
 
 func mapToDestination(src, dst []int, mapping string) {
@@ -88,6 +145,80 @@ func mapToDestination(src, dst []int, mapping string) {
 			dst[i] = destinationRangeStart + (value - sourceRangeStart)
 		}
 	}
+}
+
+func mapRangeToDestination(src, dst []seedRange, mapping string) ([]seedRange, []seedRange) {
+	mapList := strings.Fields(mapping)
+	destinationRangeStart, _ := strconv.Atoi(mapList[0])
+	sourceRangeStart, _ := strconv.Atoi(mapList[1])
+	rangeLength, _ := strconv.Atoi(mapList[2])
+
+	// 	fmt.Print("MapList: ")
+	// 	fmt.Println(mapList)
+
+	// start -> before range
+	// 		end -> before range  --- do nothing
+	// 		end -> within range  --- split, write portion in range to destination, leave remainder in source
+	// 		end -> after range   --- split, write middle portion in range to destination, leave first part in source, add additional range to source
+
+	// start -> within range
+	// 		end -> within range  --- write all range to destination, delete from source
+	// 		end -> after range   --- write first portion in range to destination, leave extra range in source
+
+	// start -> after range  --- do nothing, leave in src
+	initSrcLen := len(src)
+	for i := initSrcLen - 1; i >= 0; i-- {
+		firstSeed := src[i].start
+		lastSeed := src[i].start + src[i].rng - 1
+		if firstSeed < sourceRangeStart {
+			if lastSeed >= sourceRangeStart && lastSeed < sourceRangeStart+rangeLength {
+				dst = append(dst, seedRange{destinationRangeStart, lastSeed - sourceRangeStart + 1})
+				src[i].rng = sourceRangeStart - firstSeed
+				// 				fmt.Print("case 1: ")
+				// 				fmt.Print(src[i])
+				// 				fmt.Print(" -- ")
+				// 				fmt.Println(dst)
+			} else if lastSeed >= sourceRangeStart+rangeLength {
+				dst = append(dst, seedRange{destinationRangeStart, rangeLength})
+				src[i].rng = sourceRangeStart - firstSeed
+				src = append(src, seedRange{sourceRangeStart + rangeLength, lastSeed - (sourceRangeStart + rangeLength) + 1})
+				// 				fmt.Print("case 2: ")
+				// 				fmt.Print(src[i])
+				// 				fmt.Print(" -- ")
+				// 				fmt.Println(dst)
+			}
+		} else if firstSeed >= sourceRangeStart && firstSeed < sourceRangeStart+rangeLength {
+			if lastSeed < sourceRangeStart+rangeLength {
+				dst = append(dst, seedRange{firstSeed - (sourceRangeStart - destinationRangeStart), src[i].rng})
+				src = slices.Delete(src, i, i+1)
+				// 				fmt.Print("case 3: ")
+				// 				fmt.Print(src)
+				// 				fmt.Print(" -- ")
+				// 				fmt.Println(dst)
+			} else if lastSeed >= sourceRangeStart+rangeLength {
+				dst = append(dst, seedRange{firstSeed - (sourceRangeStart - destinationRangeStart), sourceRangeStart + rangeLength - firstSeed})
+				src[i].start = sourceRangeStart + rangeLength
+				src[i].rng = lastSeed - (sourceRangeStart + rangeLength) + 1
+				// 				fmt.Print("case 4: ")
+				// 				fmt.Print(src[i])
+				// 				fmt.Print(" -- ")
+				// 				fmt.Println(dst)
+			}
+		}
+		// 		fmt.Print(src)
+		// 		fmt.Print(" -- ")
+		// 		fmt.Println(dst)
+	}
+	return src, dst
+}
+
+func getNearestSeedRange(src []seedRange) int {
+	m := func(a, b seedRange) int {
+		return cmp.Compare(a.start, b.start)
+	}
+
+	minSeedRange := slices.MinFunc(src, m)
+	return minSeedRange.start
 }
 
 func atoiWrapper(s string) int {

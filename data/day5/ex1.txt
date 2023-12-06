@@ -6,7 +6,7 @@ seed-to-soil map:
 
 soil-to-fertilizer map:
 0 15 37
-37 52 2
+37 52 2	
 39 0 15
 
 fertilizer-to-water map:

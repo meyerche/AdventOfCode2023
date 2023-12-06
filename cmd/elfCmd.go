@@ -41,7 +41,7 @@ func runTheDay(dayNum int, data []string) {
 	case 5:
 		fmt.Println("*** Beginning Day 5 ***")
 		fmt.Println("Nearest location = " + strconv.Itoa(day.Day5Part1(data)))
-		// fmt.Println("Total cards = " + strconv.Itoa(day.Day4Part2(data)))
+		fmt.Println("Nearest location = " + strconv.Itoa(day.Day5Part2(data)))
 
 	}
 }

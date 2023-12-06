@@ -45,6 +45,38 @@ func Day3Part1(data []string) int {
 	return sum
 }
 
+// func Day3Part2(data []string) int {
+// 	fmt.Println("*** Begin Day 3, Part 2 ***")
+//
+// 	sum := 0
+//
+// 	for i := 0; i < len(data); i++ {
+// 		line := data[i]
+//
+// 		var prevLine string
+// 		if i > 0 {
+// 			prevLine = data[i-1]
+// 		} else {
+// 			prevLine = ""
+// 		}
+//
+// 		var nextLine string
+// 		if i < len(data)-1 {
+// 			nextLine = data[i+1]
+// 		} else {
+// 			nextLine = ""
+// 		}
+//
+// 		asterisks := getAsterisks(line)
+//
+// 		sum += processGears(asterisks, line, prevLine, nextLine)
+// 	}
+//
+// 	fmt.Println("*** End Day 3, Part 1 ***")
+//
+// 	return sum
+// }
+
 func getNumbers(line string) partNumbers {
 	var numbers partNumbers
 	foundNumber := false
@@ -67,6 +99,19 @@ func getNumbers(line string) partNumbers {
 
 	return numbers
 }
+
+// func getAsterisks(line string) partNumbers {
+// 	var asterisks partNumbers
+//
+// 	for i, value := range line {
+// 		if value == '*' {
+// 			newAsterisk := partNumber{"*", i}
+// 			asterisks = append(asterisks, newAsterisk)
+// 		}
+// 	}
+//
+// 	return asterisks
+// }
 
 func processLine(nums partNumbers, line, prevLine, nextLine string) int {
 	lineSum := 0
@@ -105,10 +150,46 @@ func isPartNumber(i, l int, line string) bool {
 		// number is at or one away from end of line so just check to the end of the line
 		result = strings.ContainsFunc(line[i-1:], f)
 	} else {
-		result = strings.ContainsFunc(line[i-1:i+l+1], f)	
+		result = strings.ContainsFunc(line[i-1:i+l+1], f)
 	}
 
 	return result
+}
+
+// func processGears(asterisks partNumbers, line, prevLine, nextLine string) int {
+// 	lineSum := 0
+//
+// 	for _, asterisk := range asterisks {
+// 		adjacentParts := countAdjacentPart(asterisk.index, line)
+// 		if len(prevLine) > 0 {
+// 			adjacentParts += countAdjacentParts(idx, prevLine)
+// 		}
+// 		if len(nextLine) > 0 && !isGear {
+// 			adjacentParts += countAdjacentParts(idx, nextLine)
+// 		}
+//
+// 		if adjacentParts == 2 {
+// 		}
+// 	}
+// }
+
+func countAdjacentPart(i int, line string) int {
+	f := func(c rune) bool {
+		return !unicode.IsDigit(c)
+	}
+
+	var result []string
+	if i == 0 {
+		// number starts at the beginning of the line
+		result = strings.FieldsFunc(line[:2], f)
+	} else if (i + 1) >= len(line)-1 {
+		// number is at or one away from end of line so just check to the end of the line
+		result = strings.FieldsFunc(line[i-1:], f)
+	} else {
+		result = strings.FieldsFunc(line[i-1:i+2], f)
+	}
+
+	return len(result)
 }
 
 // ASCII digits to integer.
