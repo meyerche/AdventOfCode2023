@@ -42,6 +42,9 @@ func runTheDay(dayNum int, data []string) {
 		fmt.Println("*** Beginning Day 5 ***")
 		fmt.Println("Nearest location = " + strconv.Itoa(day.Day5Part1(data)))
 		fmt.Println("Nearest location = " + strconv.Itoa(day.Day5Part2(data)))
-
+	case 6:
+		fmt.Println("*** Beginning Day 6 ***")
+		fmt.Println("Winning combos = " + strconv.FormatInt(day.Day6Part1(data), 10))
+		fmt.Println("Big race combos = " + strconv.FormatInt(day.Day6Part2(data), 10))
 	}
 }
