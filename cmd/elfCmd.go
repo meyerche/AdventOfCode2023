@@ -50,5 +50,9 @@ func runTheDay(dayNum int, data []string) {
 		fmt.Println("*** Beginning Day 7 ***")
 		fmt.Println("Total Winnings = " + strconv.Itoa(day.Day7Part1(data)))
 		fmt.Println("Total Winnings = " + strconv.Itoa(day.Day7Part2(data)))
+	case 8:
+		fmt.Println("*** Beginning Day 8 ***")
+		//fmt.Println("Steps = " + strconv.Itoa(day.Day8Part1(data)))
+		fmt.Println("Ghost Steps = " + strconv.Itoa(day.Day8Part2(data)))
 	}
 }
