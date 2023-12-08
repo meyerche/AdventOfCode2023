@@ -46,5 +46,9 @@ func runTheDay(dayNum int, data []string) {
 		fmt.Println("*** Beginning Day 6 ***")
 		fmt.Println("Winning combos = " + strconv.FormatInt(day.Day6Part1(data), 10))
 		fmt.Println("Big race combos = " + strconv.FormatInt(day.Day6Part2(data), 10))
+	case 7:
+		fmt.Println("*** Beginning Day 7 ***")
+		fmt.Println("Total Winnings = " + strconv.Itoa(day.Day7Part1(data)))
+		fmt.Println("Total Winnings = " + strconv.Itoa(day.Day7Part2(data)))
 	}
 }
