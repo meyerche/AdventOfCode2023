@@ -65,47 +65,19 @@ func navigate(dir string, nodes map[string][]string) int {
 	return count
 }
 
-func navigateLikeGhosts(directions string, nodes map[string][]string) int {
+func navigateFromLocation(directions string, loc string, nodes map[string][]string) int {
 	count := 0
 
-	// BPA ==> 11309
-	// QCA ==> 15517
-	// NDA ==> 20777
-	// FDA ==> 19199
-	// BVA ==> 17621
-	// AAA ==> 16043
-	// locations := []string{"BPA", "QCA", "NDA", "FDA", "BVA", "AAA"}
-
-	locations := getStartingLocations(nodes)
-	fmt.Println(locations)
-
-	finished := false
-	for !finished {
+	for loc[2:] != "Z" {
 		for _, dir := range directions {
-			finished = true
-
-			// more one step for each current node location
-			for i, loc := range locations {
-				if dir == 'L' {
-					locations[i] = nodes[loc][0]
-				} else {
-					locations[i] = nodes[loc][1]
-				}
-
-				if locations[i][2:] != "Z" {
-					finished = false
-				}
-				// else {
-				// 	fmt.Printf("%d - location: %d, node: %s, %s\n", count, i, locations[i], nodes[loc])
-				// }
+			if dir == 'L' {
+				loc = nodes[loc][0]
+			} else {
+				loc = nodes[loc][1]
 			}
-
 			count++
-			if count%1000000 == 0 {
-				fmt.Println(count)
-			}
 
-			if finished {
+			if loc[2:] == "Z" {
 				break
 			}
 		}
@@ -114,15 +86,98 @@ func navigateLikeGhosts(directions string, nodes map[string][]string) int {
 	return count
 }
 
+func navigateLikeGhosts(directions string, nodes map[string][]string) int {
+	locations := getStartingLocations(nodes)
+	fmt.Println(locations)
+
+	steps := make([]int, len(locations))
+
+	for i, loc := range locations {
+		steps[i] = navigateFromLocation(directions, loc, nodes)
+	}
+
+	// find least common multiple
+	totalSteps := findLcm(steps)
+
+	return totalSteps
+
+	// *********************************
+	// brute force method takes too long
+	// *********************************
+	// BPA ==> 11309
+	// QCA ==> 15517
+	// NDA ==> 20777
+	// FDA ==> 19199
+	// BVA ==> 17621
+	// AAA ==> 16043
+	// locations := []string{"BPA", "QCA", "NDA", "FDA", "BVA", "AAA"}
+
+	// 	count := 0
+	// 	finished := false
+	// 	for !finished {
+	// 		for _, dir := range directions {
+	// 			finished = true
+	//
+	// 			// more one step for each current node location
+	// 			for i, loc := range locations {
+	// 				if dir == 'L' {
+	// 					locations[i] = nodes[loc][0]
+	// 				} else {
+	// 					locations[i] = nodes[loc][1]
+	// 				}
+	//
+	// 				if locations[i][2:] != "Z" {
+	// 					finished = false
+	// 				}
+	// 				// else {
+	// 				// 	fmt.Printf("%d - location: %d, node: %s, %s\n", count, i, locations[i], nodes[loc])
+	// 				// }
+	// 			}
+	//
+	// 			count++
+	// 			if count%1000000 == 0 {
+	// 				fmt.Println(count)
+	// 			}
+	//
+	// 			if finished {
+	// 				break
+	// 			}
+	// 		}
+	// 	}
+	//
+	// 	return count
+}
+
 func getStartingLocations(nodes map[string][]string) []string {
 	start := []string{}
 
 	for node := range nodes {
 		// fmt.Println(node)
-		if node[2:] == "A" && node != "AAA" {
+		if node[2:] == "A" {
 			start = append(start, node)
 		}
 	}
 
 	return start
+}
+
+func findLcm(steps []int) int {
+	totalSteps := steps[0]
+	for i := 1; i < len(steps); i++ {
+		totalSteps = lcm(totalSteps, steps[i])
+	}
+	return totalSteps
+}
+
+func lcm(a, b int) int {
+	return a * b / gcd(a, b)
+}
+
+func gcd(a, b int) int {
+	for b != 0 {
+		rem := a % b
+		a = b
+		b = rem
+	}
+	return a
 }
