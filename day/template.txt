@@ -1,0 +1,20 @@
+package day
+
+import (
+	"fmt"
+	"strings"
+	
+	"github.com/meyerche/AdventOfCode2023/util"
+)
+
+func Day_Part1(lines []string) int {
+	fmt.Println("--- Begin Part 1 ---")
+
+	return 0
+}
+
+func Day_Part2(lines []string) int {
+	fmt.Println("--- Begin Part 2 ---")
+	
+	return 0
+}

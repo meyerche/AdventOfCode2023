@@ -58,5 +58,9 @@ func runTheDay(dayNum int, data []string) {
 		fmt.Println("*** Beginning Day 9 ***")
 		fmt.Println("Oasis Report (extrapolated value) = " + strconv.Itoa(day.Day9Part1(data)))
 		fmt.Println("Oasis Report (extrapolated backward value) = " + strconv.Itoa(day.Day9Part2(data)))
+	case 10:
+		fmt.Println("*** Beginning Day 10 ***")
+		fmt.Println("Step Count = " + strconv.Itoa(day.Day10Part1(data)))
+		fmt.Println("Interior Points = " + strconv.Itoa(day.Day10Part2(data)))
 	}
 }
