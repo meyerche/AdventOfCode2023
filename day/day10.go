@@ -56,6 +56,10 @@ func Day10Part1(lines []string) int {
 	return stepCount
 }
 
+// ********************************************************************
+// This is all a bit of a mess. A result of going down multiple paths
+// trying to get the logic right in order to identify interior points
+// ********************************************************************
 func Day10Part2(lines []string) int {
 	fmt.Println("--- Begin Part 2 ---")
 
@@ -65,11 +69,20 @@ func Day10Part2(lines []string) int {
 	startLoc := findStartTile(lines)
 
 	// make first move
-	stepA, _ := makeFirstMove(lines, startLoc.row, startLoc.col)
-	if stepA == "north" || stepA == "south" {
+	stepA, stepB := makeFirstMove(lines, startLoc.row, startLoc.col)
+	if (stepA == "north" || stepA == "south") && (stepB == "east" || stepB == "west") {
+		points[startLoc.row][startLoc.col] = 2
+	} else if (stepA == "east" || stepA == "west") && (stepB == "north" || stepB == "south") {
+		points[startLoc.row][startLoc.col] = 2
+	} else if (stepA == "north" || stepA == "south") && (stepB == "north" || stepB == "south") {
 		points[startLoc.row][startLoc.col] = 1
 	} else {
 		points[startLoc.row][startLoc.col] = 0
+	}
+	for k, v := range TILES {
+		if slices.Contains(v, stepA) && slices.Contains(v, stepB) {
+			lines[startLoc.row] = strings.Replace(lines[startLoc.row], "S", string(k), 1)
+		}
 	}
 
 	locA := setCoordinates(stepA, startLoc)
@@ -89,7 +102,7 @@ func Day10Part2(lines []string) int {
 		locA = setCoordinates(stepA, locA)
 	}
 
-	interiorPoints := countInterior(points)
+	interiorPoints := countInterior(points, lines)
 	fmt.Println(interiorPoints)
 	// printPoints(points)
 
@@ -188,26 +201,71 @@ func initializeEmptyGrid(lines []string) [][]int {
 	return points
 }
 
-func countInterior(grid [][]int) int {
+func countInterior(grid [][]int, lines []string) int {
 	count := 0
+	isInterior := false
+	lastCorner := '.'
 
 	for i, row := range grid {
 		// set tally segments to the right and left of each point
+		fmt.Println(row)
 		for j := range row {
-			// 			segmentTallyLeft := sumIfPositive(row[:j])
-			// 			segmentTallyRight := sumIfPositive(row[j:])
-			segmentTallyLeft := sumSegments(row[:j])
-			segmentTallyRight := sumSegments(row[j:])
 			if grid[i][j] < 0 {
-				if segmentTallyLeft%2 == 1 && segmentTallyRight%2 == 1 {
+				if isInterior {
 					count++
-					fmt.Printf("row=%d col=%d -- tallyLeft=%d tallyRight=%d \n", i, j, segmentTallyLeft, segmentTallyRight)
+					fmt.Printf("row=%d col=%d -- count=%d \n", i, j, count)
 				}
+			} else if grid[i][j] == 1 {
+				isInterior = !isInterior
+			} else if grid[i][j] == 2 {
+				corner := rune(lines[i][j])
+				//fmt.Printf("row=%d col=%d -- corner=%s lastCorner=%s \n", i, j, string(corner), string(lastCorner))
+
+				if cornerIsBorder(corner, lastCorner) {
+					isInterior = !isInterior
+					lastCorner = '.'
+				} else {
+					if lastCorner != '.' {
+						lastCorner = '.'
+					} else {
+						lastCorner = rune(lines[i][j])
+					}
+				}
+				//fmt.Println(isInterior)
 			}
 		}
+		fmt.Println(count)
+		isInterior = false
+		lastCorner = '.'
 	}
 
 	return count
+}
+
+func cornerIsBorder(corner, lastCorner rune) bool {
+	isBorder := false
+
+	switch lastCorner {
+	case 'F':
+		if corner == 'J' {
+			isBorder = true
+		}
+	case 'J':
+		if corner == 'F' {
+			isBorder = true
+		}
+	case '7':
+		if corner == 'L' {
+			isBorder = true
+		}
+	case 'L':
+		if corner == '7' {
+			isBorder = true
+		}
+	}
+
+	fmt.Printf("lastCorner = %s, corner = %s, isBorder = %t\n", string(lastCorner), string(corner), isBorder)
+	return isBorder
 }
 
 func sumIfPositive(values []int) int {
